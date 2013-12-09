@@ -66,7 +66,7 @@ class Model
     }
 
     //获得连接驱动
-    protected function run($table, $full, $driver)
+    protected function run($table, $full = null, $driver = null)
     {
         //初始化默认表
         $this->getTable($table, $full);

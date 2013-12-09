@@ -228,7 +228,6 @@ function load($file)
 }
 
 
-
 /**
  * 别名导入
  * @param string | array $name 别名
@@ -501,6 +500,7 @@ function throw_exception($msg, $type = "HdphpException", $code = 0)
         error($msg);
     }
 }
+
 if (!defined("HDPHP_PATH"))
     exit('No direct script access allowed');
 /**
@@ -544,10 +544,7 @@ function error($error)
         _404("[Error]" . $e['message'] . " [Time]" . date("y-m-d h:i") . " [File]" . $e['file'] . " [Line]" . $e['line']);
     }
     //显示DEBUG模板，开启DEBUG显示trace
-    if (is_file(C('ERROR_TPL')))
-        include C('ERROR_TPL');
-    else
-        include HDPHP_TPL_PATH . 'halt.html';
+    include HDPHP_TPL_PATH . 'halt.html';
     exit;
 }
 

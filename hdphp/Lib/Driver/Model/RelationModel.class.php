@@ -191,7 +191,6 @@ class RelationModel extends Model
                     }
                     break;
                 case BELONGS_TO:
-                    p($data);
                     $_id = $db->add($data[$table]);
                     $db->table($this->table)->where("id=" . $id)->save(array($fk => $_id));
                     $result_id[$table] = $_id;

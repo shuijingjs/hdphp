@@ -890,6 +890,7 @@ function _request($method, $varName = null, $html = true)
  */
 function _404($msg = "", $filePath = "")
 {
+    echo 33;
     DEBUG && error($msg);
     //写入日志
     Log::write($msg);
@@ -899,11 +900,10 @@ function _404($msg = "", $filePath = "")
         $filePath = C("404_TPL");
     }
     //文件不可操作
-    if (!is_file($filePath) || !is_readable($filePath)) {
-        $filePath = HDPHP_TPL_PATH . '/404.html';
-    }
     set_http_state(404);
-    include $filePath;
+    if (is_file($filePath) && is_readable($filePath)) {
+        include $filePath;
+    }
     exit;
 }
 
@@ -979,23 +979,23 @@ function print_const($view = true, $tplConst = false)
  */
 function date_before($time, $unit = null)
 {
-    $time=intval($time);
+    $time = intval($time);
     $unit = is_null($unit) ? array("年", "月", "星期", "日", "小时", "分钟", "秒") : $unit;
     switch (true) {
         case $time < (NOW - 31536000):
-            return floor((NOW - $time) / 31536000) . $unit[0].'前';
+            return floor((NOW - $time) / 31536000) . $unit[0] . '前';
         case $time < (NOW - 2592000):
-            return floor((NOW - $time) / 2592000) . $unit[1].'前';
+            return floor((NOW - $time) / 2592000) . $unit[1] . '前';
         case $time < (NOW - 604800):
-            return floor((NOW - $time) / 604800) . $unit[2].'前';
+            return floor((NOW - $time) / 604800) . $unit[2] . '前';
         case $time < (NOW - 86400):
-            return floor((NOW - $time) / 86400) . $unit[3].'前';
+            return floor((NOW - $time) / 86400) . $unit[3] . '前';
         case $time < (NOW - 3600):
-            return floor((NOW - $time) / 3600) . $unit[4].'前';
+            return floor((NOW - $time) / 3600) . $unit[4] . '前';
         case $time < (NOW - 60):
-            return floor((NOW - $time) / 60) . $unit[5].'前';
+            return floor((NOW - $time) / 60) . $unit[5] . '前';
         default:
-            return floor(NOW - $time) . $unit[6].'前';
+            return floor(NOW - $time) . $unit[6] . '前';
 
     }
 }

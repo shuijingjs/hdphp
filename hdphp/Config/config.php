@@ -26,9 +26,7 @@ return array(
     "TOKEN_ON"                      => 0,           //令牌状态
     "TOKEN_NAME"                    => "__TOKEN__", //令牌的表单name
     /********************************系统调试********************************/
-    "ERROR_TPL"                     => HDPHP_TPL_PATH . 'halt.html', //错误信息模板
     "DEBUG_MENU"                    => 1,            //显示debug菜单
-//    "SHOW_WARNING"                  => 1,           //显示NOTICE或WARNING错误  已经废弃
     "SHOW_SYSTEM"                   => 1,           //系统信息
     "SHOW_CACHE"                    => 1,           //缓存监控,必须将CACHE_SAVE配置开启才有效
     "SHOW_INCLUDE"                  => 1,           //文件列表
