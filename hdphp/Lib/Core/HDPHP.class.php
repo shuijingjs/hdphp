@@ -33,7 +33,6 @@ final class HDPHP
         defined("CONTROL_PATH") or define("CONTROL_PATH", APP_PATH . 'Control/');
         defined("MODEL_PATH") or define("MODEL_PATH", APP_PATH . 'Model/');
         defined("CONFIG_PATH") or define("CONFIG_PATH", APP_PATH . 'Config/');
-//        defined("EXTEND_PATH") or define("EXTEND_PATH", APP_PATH . 'Extend/');
         defined("EVENT_PATH") or define("EVENT_PATH", APP_PATH . 'Event/');
         defined("LANGUAGE_PATH") or define("LANGUAGE_PATH", APP_PATH . 'Language/');
         defined("TAG_PATH") or define("TAG_PATH", APP_PATH . 'Tag/');

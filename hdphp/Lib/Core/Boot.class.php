@@ -44,15 +44,15 @@ final class Boot
         define("HDPHP_LANGUAGE_PATH", HDPHP_LIB_PATH . 'Language/'); //语言目录
         define("HDPHP_TPL_PATH", HDPHP_LIB_PATH . 'Tpl/'); //框架模板目录
         defined("MODULE_PATH") or define("MODULE_PATH", IS_GROUP ? GROUP_PATH . 'App/' : APP_PATH); //模块目录
-        define("COMMON_PATH", IS_GROUP ? GROUP_PATH . 'Common/' : APP_PATH); //应用组公共目录
-        define("COMMON_CONFIG_PATH", IS_GROUP ? COMMON_PATH . 'Config/' : APP_PATH); //应用组公共目录
-        define("COMMON_MODEL_PATH", IS_GROUP ? COMMON_PATH . 'Model/' : APP_PATH); //应用组公共目录
-        define("COMMON_CONTROL_PATH", IS_GROUP ? COMMON_PATH . 'Control/' : APP_PATH); //应用组公共目录
-        define("COMMON_LANGUAGE_PATH", IS_GROUP ? COMMON_PATH . 'Language/' : APP_PATH); //应用组语言包目录
-        define("COMMON_EXTEND_PATH", IS_GROUP ? COMMON_PATH . 'Extend/' : APP_PATH); //应用组扩展目录
-        define("COMMON_EVENT_PATH", IS_GROUP ? COMMON_PATH . 'Event/' : APP_PATH); //应用组事件目录
-        define("COMMON_TAG_PATH", IS_GROUP ? COMMON_PATH . 'Tag/' : APP_PATH); //应用组标签目录
-        define("COMMON_LIB_PATH", IS_GROUP ? COMMON_PATH . 'Lib/' : APP_PATH); //应用组扩展包目录
+        defined("COMMON_PATH") or define("COMMON_PATH", IS_GROUP ? GROUP_PATH . 'Common/' : APP_PATH); //应用组公共目录
+        defined("COMMON_CONFIG_PATH") or define("COMMON_CONFIG_PATH", IS_GROUP ? COMMON_PATH . 'Config/' : APP_PATH); //应用组公共目录
+        defined("COMMON_MODEL_PATH") or define("COMMON_MODEL_PATH", IS_GROUP ? COMMON_PATH . 'Model/' : APP_PATH); //应用组公共目录
+        defined("COMMON_CONTROL_PATH") or define("COMMON_CONTROL_PATH", IS_GROUP ? COMMON_PATH . 'Control/' : APP_PATH); //应用组公共目录
+        defined("COMMON_LANGUAGE_PATH") or define("COMMON_LANGUAGE_PATH", IS_GROUP ? COMMON_PATH . 'Language/' : APP_PATH); //应用组语言包目录
+        defined("COMMON_EXTEND_PATH") or define("COMMON_EXTEND_PATH", IS_GROUP ? COMMON_PATH . 'Extend/' : APP_PATH); //应用组扩展目录
+        defined("COMMON_EVENT_PATH") or define("COMMON_EVENT_PATH", IS_GROUP ? COMMON_PATH . 'Event/' : APP_PATH); //应用组事件目录
+        defined("COMMON_TAG_PATH") or define("COMMON_TAG_PATH", IS_GROUP ? COMMON_PATH . 'Tag/' : APP_PATH); //应用组标签目录
+        defined("COMMON_LIB_PATH") or define("COMMON_LIB_PATH", IS_GROUP ? COMMON_PATH . 'Lib/' : APP_PATH); //应用组扩展包目录
         //加载核心文件
         self::loadCoreFile();
         //系统配置
