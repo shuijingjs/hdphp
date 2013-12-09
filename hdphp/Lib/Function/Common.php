@@ -544,7 +544,7 @@ function error($error)
         _404("[Error]" . $e['message'] . " [Time]" . date("y-m-d h:i") . " [File]" . $e['file'] . " [Line]" . $e['line']);
     }
     //显示DEBUG模板，开启DEBUG显示trace
-    include HDPHP_TPL_PATH . 'halt.html';
+    require HDPHP_TPL_PATH . 'halt.html';
     exit;
 }
 

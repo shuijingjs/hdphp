@@ -890,7 +890,6 @@ function _request($method, $varName = null, $html = true)
  */
 function _404($msg = "", $filePath = "")
 {
-    echo 33;
     DEBUG && error($msg);
     //写入日志
     Log::write($msg);
