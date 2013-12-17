@@ -40,7 +40,7 @@ return array(
     "SESSION_AUTO"                  => 1,           //自动开启SESSION
     "SESSION_NAME"                  => "hdsid",     //session_name
     "SESSION_ENGINE"                => "file",      //引擎:file,mysql,memcache
-    "SESSION_SAVE_PATH"             => "",          //以文件处理时的位置
+    "SESSION_SAVE_PATH"             => "",          //文件储存SESSION位置
     "SESSION_LIFETIME"              => 1440,        //SESSION过期时间
     "SESSION_TABLE_NAME"            => "session",   //SESSION的表名
     "SESSION_GC_DIVISOR"            => 10,          //SESSION清理频率,数字越小清理越频繁
@@ -62,11 +62,13 @@ return array(
     "PATHINFO_VAR"                  => "q",         //兼容模式get变量
     "PATHINFO_HTML"                 => "",     //伪静态扩展名
     /********************************url变量********************************/
+    "VAR_GROUP"                     => "g",         //应用组变量
     "VAR_APP"                       => "a",         //应用变量名，应用组模式有效
     "VAR_CONTROL"                   => "c",         //模块变量
     "VAR_METHOD"                    => "m",         //动作变量
     /********************************项目参数********************************/
     "DEFAULT_NAME"                  => "@",         //应用名称
+    "DEFAULT_GROUP"                 => "App",        //默认应用组
     "DEFAULT_APP"                   => "index",     //默认项目
     "DEFAULT_CONTROL"               => "Index",     //默认模块
     "DEFAULT_METHOD"                => "index",     //默认方法

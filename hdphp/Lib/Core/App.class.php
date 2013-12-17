@@ -27,10 +27,7 @@ final class App
         self::init();
         self::start();
         //Debug End
-        if (DEBUG) {
-            if ((!C("DEBUG_AJAX") && IS_AJAX) || !C("DEBUG_SHOW")) ; else
-                Debug::show("APP_START", "APP_END");
-        }
+        DEBUG and Debug::show("APP_START", "APP_END");
         //日志记录
         Log::save();
         event("APP_END");

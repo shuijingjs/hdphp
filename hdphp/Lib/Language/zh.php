@@ -115,9 +115,6 @@ return array(
     "cart_add_error" => '购物车ADD方法参数设置错误',
     "cart_update_error" => '购物车update方法参数错误，缺少sid或num值',
     "cart_del_error" => '购物车update方法参数错误，缺少sid值',
-    //HDPHP/Lib/bin/html.Class.php
-    "html_create_error1" => '请指定生成文件名参数[html_file]，请参考后盾HD框架手册',
-    "html_create_error2" => '创建目录失败，请检查目录权限',
     //HDPHP/Lib/bin/page.Class.php
     "page_nowpage" => '第',
     "page_count1" => '共',

@@ -85,7 +85,7 @@ final class Backup
     }
 
     //备份表结构
-    private function backup_structure()
+    static private function backup_structure()
     {
         $sql = "<?php if(!defined('HDPHP_PATH'))EXIT;\n";
         $db = M();
@@ -100,7 +100,7 @@ final class Backup
     }
 
     //执行备份
-    private function backup_data()
+    static private function backup_data()
     {
         foreach (self::$config as $table => $config) {
             //已经备份过的表忽略
@@ -130,12 +130,13 @@ final class Backup
             } while (true);
         }
         //更新配置文件
-        $html = "<div style='text-align:center;font-size:14px;margin-top: 50px;'>完成所有数据备份!</div>";
+        $html = "<div style='text-align:center;font-size:14px;margin-top: 50px;'>完成所有数据备份!
+        <a href='javascript:parent.location.href=\"" . __CONTROL__ ."\"' class='btn'>返回备份列表</a></div>";
         self::success($html);
     }
 
     //写入备份数据
-    private function write_backup_data($table, $data, $current_row)
+    static private function write_backup_data($table, $data, $current_row)
     {
         $fid = Q("get.fid") ? Q("get.fid") : 1;
         file_put_contents(self::$dir . "/{$table}_bk_{$fid}.php", "<?php if(!defined('HDPHP_PATH'))EXIT;\n{$data}");
@@ -147,7 +148,7 @@ final class Backup
      * @param $current_row 当前备份到的行
      * @param $table 当前备份的表
      */
-    private function next_backup($current_row, $table)
+    static private function next_backup($current_row, $table)
     {
         self::update_config_file();
         if (!headers_sent()) {
@@ -161,7 +162,7 @@ final class Backup
     }
 
     //备份或还原完毕
-    private function success($msg)
+    static private function success($msg)
     {
         if (!headers_sent()) {
             header("Content-type:text/html;charset=utf-8");

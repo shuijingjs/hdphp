@@ -190,10 +190,10 @@ function dir_create($dirName, $auth = 0755)
 function require_cache($path = null)
 {
     static $_files = array();
-    $name = strtolower($path);
+//    $name = strtolower($path);
     if (is_null($path)) return $_files;
     //缓存中存在  即代表文件已经加载  停止加载
-    if (isset($_files[$name])) {
+    if (isset($_files[$path])) {
         return true;
     }
     //区分大小写的文件判断
@@ -201,7 +201,7 @@ function require_cache($path = null)
         return false;
     }
     require($path);
-    $_files[$name] = true;
+    $_files[$path] = true;
     return true;
 }
 
@@ -492,7 +492,7 @@ function get_defines($name = "", $value = null, $type = 'user')
  * @param int $code 编码
  * @throws
  */
-function throw_exception($msg, $type = "HdphpException", $code = 0)
+function throw_exception($msg, $type = "HdException", $code = 0)
 {
     if (class_exists($type)) {
         throw new $type($msg, $code);
@@ -545,6 +545,38 @@ function error($error)
     }
     //显示DEBUG模板，开启DEBUG显示trace
     require HDPHP_TPL_PATH . 'halt.html';
+    exit;
+}
+
+/**
+ * 错误中断
+ * @param $error 错误内容
+ */
+function halt($error)
+{
+    error($error);
+}
+
+/**
+ * 404错误
+ * @param string $msg 提示信息
+ * @param string $filePath 404模板文件
+ */
+function _404($msg = "", $filePath = "")
+{
+    DEBUG && error($msg);
+    //写入日志
+    Log::write($msg);
+    //把Notice Warning写入Log
+    Log::save();
+    if (empty($filePath) && C("404_TPL")) {
+        $filePath = C("404_TPL");
+    }
+    //文件不可操作
+    set_http_state(404);
+    if (is_file($filePath) && is_readable($filePath)) {
+        include $filePath;
+    }
     exit;
 }
 
@@ -633,25 +665,13 @@ function tag()
     if (!empty($tags) && is_array($tags)) { //如果配置文件中存在标签定义
         foreach ($tags as $k) { //加载其他模块或应用中的标签库
             $arr = explode('.', $k); //如果拆分后大于1的为其他模块或应用的标签定义
-            $count = count($arr);
-            $tagClass[] = $arr[$count - 1] . "Tag"; //压入标签库类
-            switch (count($arr)) {
-                case 1:
-                    $tagFile = TAG_PATH . $arr[0] . 'Tag.class.php';
-                    break;
-                case 2:
-                    $tagFile = GROUP_PATH . $arr[0] . '/Tag/' . $arr[1] . 'Tag.class.php';
-                    break;
-            }
-            if (!require_cache($tagFile)) {
-                error("标签类文件" . $tagFile . "不存在");
+            if (!import($k)) {
+                $tagClass[] = array_pop($arr) . "Tag"; //压入标签库类
             }
         }
     }
     //加载框架核心标签库
-    import('HDPHP.Lib.Driver.View.Hd.HdBaseTag');
-    import('HDPHP.Lib.Driver.View.Hd.Compile');
-    $tagClass[] = 'hdBaseTag';
+    $tagClass[] = 'ViewTag';
     foreach ($tagClass as $_class) {
         $obj = new $_class;
         if (method_exists($obj, $_func)) {
@@ -659,6 +679,18 @@ function tag()
         }
     }
     return false;
+}
+
+/**
+ * 创建目录安全文件
+ * @param $dirs
+ */
+function safeFile($dirs)
+{
+    $file = HDPHP_TPL . '/index.html';
+    foreach ($dirs as $d) {
+        is_file($d . '/index.html') || copy($file, $d . '/index.html');
+    }
 }
 
 ?>

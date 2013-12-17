@@ -43,7 +43,6 @@ final class Boot
         define("HDPHP_FUNCTION_PATH", HDPHP_LIB_PATH . 'Function/'); //函数目录
         define("HDPHP_LANGUAGE_PATH", HDPHP_LIB_PATH . 'Language/'); //语言目录
         define("HDPHP_TPL_PATH", HDPHP_LIB_PATH . 'Tpl/'); //框架模板目录
-        defined("MODULE_PATH") or define("MODULE_PATH", IS_GROUP ? GROUP_PATH . 'App/' : APP_PATH); //模块目录
         defined("COMMON_PATH") or define("COMMON_PATH", IS_GROUP ? GROUP_PATH . 'Common/' : APP_PATH); //应用组公共目录
         defined("COMMON_CONFIG_PATH") or define("COMMON_CONFIG_PATH", IS_GROUP ? COMMON_PATH . 'Config/' : APP_PATH); //应用组公共目录
         defined("COMMON_MODEL_PATH") or define("COMMON_MODEL_PATH", IS_GROUP ? COMMON_PATH . 'Model/' : APP_PATH); //应用组公共目录
@@ -59,6 +58,10 @@ final class Boot
         C(require(HDPHP_CONFIG_PATH . 'config.php'));
         //系统事件
         C("CORE_EVENT", require(HDPHP_CONFIG_PATH . 'event.php'));
+        //应用组配置与语言包处理
+        if (IS_GROUP) {
+            is_file(COMMON_CONFIG_PATH . 'config.php') and C(require(COMMON_CONFIG_PATH . 'config.php'));
+        }
         //系统语言
         L(require(HDPHP_LANGUAGE_PATH . 'zh.php'));
         //别名
@@ -86,7 +89,7 @@ final class Boot
         $files = array(
             HDPHP_CORE_PATH . 'HDPHP.class.php', //HDPHP顶级类
             HDPHP_CORE_PATH . 'Control.class.php', //HDPHP顶级类
-            HDPHP_CORE_PATH . 'HdphpException.class.php', //异常处理类
+            HDPHP_CORE_PATH . 'HdException.class.php', //异常处理类
             HDPHP_CORE_PATH . 'App.class.php', //HDPHP顶级类
             HDPHP_CORE_PATH . 'Route.class.php', //URL处理类
             HDPHP_CORE_PATH . 'Event.class.php', //事件处理类
@@ -192,7 +195,7 @@ final class Boot
             PUBLIC_PATH,
             TEMP_PATH
         );
-        $file = HDPHP_TPL . '/index.html';
+        $file = HDPHP_TPL_PATH . '/index.html';
         foreach ($dirs as $d) {
             is_file($d . '/index.html') || copy($file, $d . '/index.html');
         }
@@ -218,16 +221,33 @@ final class Boot
             $compile .= "defined('{$n}') OR define('{$n}',{$d});";
         }
         $files = array(
-            HDPHP_CORE_PATH . 'HDPHP.class.php', //HDPHP顶级类
-            HDPHP_CORE_PATH . 'HdphpException.class.php', //异常处理类
             HDPHP_CORE_PATH . 'App.class.php', //HDPHP顶级类
-            HDPHP_CORE_PATH . 'Route.class.php', //URL处理类
-            HDPHP_CORE_PATH . 'Log.class.php', //Log日志类
+            HDPHP_CORE_PATH . 'Control.class.php', //控制器基类
+            HDPHP_CORE_PATH . 'Debug.class.php', //Debug处理类
             HDPHP_CORE_PATH . 'Event.class.php', //事件处理类
+            HDPHP_CORE_PATH . 'HDPHP.class.php', //HDPHP顶级类
+            HDPHP_CORE_PATH . 'HdException.class.php', //异常处理类
+            HDPHP_CORE_PATH . 'Log.class.php', //Log日志类
+            HDPHP_CORE_PATH . 'Route.class.php', //URL处理类
             HDPHP_FUNCTION_PATH . 'Functions.php', //应用函数
             HDPHP_FUNCTION_PATH . 'Common.php', //公共函数
+            HDPHP_DRIVER_PATH . 'Cache/Cache.class.php', //缓存基类
+            HDPHP_DRIVER_PATH . 'Cache/CacheFactory.class.php', //缓存工厂类
+            HDPHP_DRIVER_PATH . 'Cache/CacheFile.class.php', //文件缓存处理类
+            HDPHP_DRIVER_PATH . 'Db/Db.class.php', //数据处理基类
+            HDPHP_DRIVER_PATH . 'Db/DbFactory.class.php', //数据工厂类
+            HDPHP_DRIVER_PATH . 'Db/DbInterface.class.php', //数据接口类
+            HDPHP_DRIVER_PATH . 'Model/Model.class.php', //模型基类
+            HDPHP_DRIVER_PATH . 'Model/RelationModel.class.php', //关联模型类
+            HDPHP_DRIVER_PATH . 'Model/ViewModel.class.php', //视图模型类
+            HDPHP_DRIVER_PATH . 'Session/SessionAbstract.class.php', //Session抽象类
+            HDPHP_DRIVER_PATH . 'Session/SessionFactory.class.php', //Session工厂类
+            HDPHP_DRIVER_PATH . 'Session/SessionFile.class.php', //Session文件处理类
+            HDPHP_DRIVER_PATH . 'View/ViewHd.class.php', //Hd视图驱动类
             HDPHP_DRIVER_PATH . 'View/View.class.php', //视图库
-            HDPHP_DRIVER_PATH . 'View/Hd/Compile.class.php', //模板编译类
+            HDPHP_DRIVER_PATH . 'View/ViewFactory.class.php', //视图工厂库
+            HDPHP_DRIVER_PATH . 'View/ViewCompile.class.php', //模板编译类
+            HDPHP_EXTEND_PATH . 'Tool/Dir.class.php', //目录操作类
         );
         foreach ($files as $f) {
             $con = compress(trim(file_get_contents($f)));
@@ -240,7 +260,7 @@ final class Boot
     }
 
     /**
-     * 加载应用文件
+     * 编译Boot.php文件
      */
     static private function compileAppLib()
     {
@@ -257,7 +277,7 @@ final class Boot
                         $f = COMMON_LIB_PATH . $f;
                     }
                 }
-                //文件不可用
+                //检测文件
                 if (!is_file($f) && !is_readable($f)) {
                     continue;
                 }

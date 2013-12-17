@@ -53,16 +53,28 @@ class ViewModel extends Model
         return true;
     }
 
-    //查询
-    public function select($data = array())
+    //初始化
+    protected function init()
+    {
+        $opt = array(
+            "trigger" => true,
+            "joinTable" => array(),
+            "result" => NULL,
+            "data" => array(),
+            "error" => ""
+        );
+        foreach ($opt as $n => $v) {
+            $this->$n = $v;
+        }
+    }
+
+    //设置表join关联
+    public function setJoinTable()
     {
         //不存在关联定义或不关联时
         if (is_null($this->joinTable) || empty($this->view)) {
-            $this->init();
-            return call_user_func(array($this->db, __FUNCTION__), $data);
+            return;
         }
-        //条件
-        $this->where = $data;
         //主表查询字段
         $field = $this->db->opt['field'];
         //字段
@@ -82,24 +94,23 @@ class ViewModel extends Model
             $from .= $set['type'] . " " . $_table . " ";
             $from .= " ON " . $set['on'] . " ";
         }
-        $sql = "SELECT " . $field . " FROM " . $from .
-            $this->db->opt['where'] . $this->db->opt['group'] . $this->db->opt['having'] .
-            $this->db->opt['order'] . $this->db->opt['limit'];
-        $sql = $this->addTableFix($sql);
-        $result = $this->query($sql);
-        $this->init();
-        return $result;
+        $this->db->opt['field'] = $field;
+        $this->db->opt['table'] = $from;
     }
 
-    /**
-     * 添加表前缀
-     * @access public
-     * @param string $sql
-     * @return string   格式化后的SQL
-     */
-    private function addTableFix($sql)
+    //查询
+    public function select($data = array())
     {
-        return preg_replace("@(?<=[\s,=><])(\w+?\.[a-z]+?)@i", C("DB_PREFIX") . '\1', $sql);
+        //设置表关联
+        $this->setJoinTable($data);
+        return parent::select($data);
+    }
+    //统计
+    public function count($args = "")
+    {
+        //设置表关联
+        $this->setJoinTable();
+        return parent::count($args);
     }
 }
 

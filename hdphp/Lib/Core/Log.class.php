@@ -30,7 +30,6 @@ class Log
         //获得日志类型
         $type = substr(FriendlyErrorType($logType), 2);
         if (in_array($type, array_change_value_case(C("LOG_TYPE"), 1))) {
-            $date = date("y-m-d h:i:s");
             self::$log[] = $message . "\n";
         }
     }

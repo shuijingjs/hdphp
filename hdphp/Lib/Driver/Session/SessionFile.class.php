@@ -29,7 +29,7 @@ class SessionFile extends SessionAbstract
             session_save_path(C("SESSION_SAVE_PATH"));
         }
         if (!session_save_path()) {
-            dir::create(ROOT_PATH . '/session');
+            dir::create(TEMP_ . '/session');
             session_save_path(ROOT_PATH . '/session');
         }
         session_name(C("SESSION_NAME"));

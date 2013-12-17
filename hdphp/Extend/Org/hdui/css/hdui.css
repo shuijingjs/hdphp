@@ -11,13 +11,59 @@
 /* |-----------------------------------------------------------------------------------
 /* |   License: http://www.apache.org/licenses/LICENSE-2.0
 /* '-----------------------------------------------------------------------------------*/
-* {
-    padding: 0px;
-    margin: 0px;
+/** {*/
+/*padding: 0px;*/
+/*margin: 0px;*/
+/*}*/
+
+body, input, button, select, textarea {
+    font-family: Arial;
 }
 
-body {
-    font-family: "微软雅黑", "Helvetica Neue", Helvetica, Arial, sans-serif;
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    border-radius: 4px;
+    color: #555555;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 20px;
+    margin-bottom: 0px;
+    padding: 4px 6px;
+    vertical-align: middle;
+    border-radius: 0px;
+    box-shadow: 2px 2px 2px #F0F0F0 inset !important;
+}
+
+option {
+    padding: 4px 6px;
+}
+
+input[type=text], input[type=password], textarea, select {
+    background-color: #FFFFFF;
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 18px;
+    margin: 0;
+    padding: 4px;
+    vertical-align: middle;
+}
+
+input[type='text']:focus, input[type='password']:focus, textarea:focus {
+    background: #fffbde;
+    outline: 2px solid #51B4FF;
+    box-shadow: none !important;
+}
+
+select, input[type="file"] {
+    height: 30px;
+    line-height: 30px;
+}
+
+li {
+    vertical-align: middle;
+}
+
+a, a:hover, a:focus {
+    text-decoration: none;
 }
 
 ul, ol {
@@ -32,9 +78,9 @@ img {
     border: none;
 }
 
-table, th, td {
-    border-collapse: collapse;
-}
+/*table, th, td {*/
+/*border-collapse: collapse;*/
+/*}*/
 
 th {
     font-weight: normal
@@ -44,14 +90,8 @@ a {
     text-decoration: none;
 }
 
-input[type='text']:focus, input[type='password']:focus, textarea:focus {
-    border: 2px solid #51B4FF;
-    background: #fffbde;
-}
-
 iframe {
     width: 100%;
-    height: 100%;
     border: none;
 }
 
@@ -60,6 +100,11 @@ iframe {
     font-size: 12px;
     margin-left: 3px;
     vertical-align: middle;
+}
+
+div.line {
+    height: 3px;
+    border-bottom: solid 1px #E6E6E6;
 }
 
 /* ====================================================================================
@@ -102,7 +147,7 @@ div.tab ul.tab_menu li a.action {
     border: solid 1px #009CAE;
     background: #009CAE;
     color: #fff;
-    position: relative;
+    /*position: relative;*/
 }
 
 div.tab ul.tab_menu li a:hover {
@@ -189,8 +234,8 @@ table.table, table.table tr td, table.table tr th {
 table.table1 {
     /*border: solid 1px #ddd;*/
     width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
+    /*border-collapse: collapse;*/
+    /*font-size: 12px;*/
 }
 
 table.table1 tr, table.table1 th, table.table1 td {
@@ -209,7 +254,7 @@ table.table1 tr th {
 }
 
 table.table1 tr td {
-    color: #666666;
+    /*color: #666666;*/
     vertical-align: middle;
 }
 
@@ -221,7 +266,7 @@ table.table1 tr.header {
 }
 
 table.table1 th, table.table1 td {
-    border-collapse: collapse;
+    /*border-collapse: collapse;*/
     padding: 4px 15px;
 }
 
@@ -265,6 +310,7 @@ table.table2 tbody th, table.table2 tbody td {
     border: none;
     border-bottom: solid 1px #eaeaea;
     padding: 5px 8px;
+    overflow: hidden;
 }
 
 /***************************table3表格************************/
@@ -292,54 +338,54 @@ table.table2 tbody th, table.table2 tbody td {
 /* ====================================================================================*/
 
 /*按钮样式2*/
-.btn, .btn1, .btn2 {
-    border: none;
-    color: #FFFFFF;
-    cursor: pointer;
-    font-size: 12px;
-    height: 25px;
-    overflow: hidden;
-    box-shadow: none;
-    vertical-align: middle;
-    padding: 0px 10px 0px;
-    display: inline-block;
-    text-align: center;
-    text-indent: 0px;
-    line-height: 2em;
-    margin-right: 10px;
-}
+/*.btn, .btn1, .btn2 {*/
+/*border: none;*/
+/*color: #FFFFFF;*/
+/*cursor: pointer;*/
+/*font-size: 12px;*/
+/*height: 25px;*/
+/*overflow: hidden;*/
+/*box-shadow: none;*/
+/*vertical-align: middle;*/
+/*padding: 0px 10px 0px;*/
+/*display: inline-block;*/
+/*text-align: center;*/
+/*text-indent: 0px;*/
+/*line-height: 2em;*/
+/*margin-right: 10px;*/
+/*}*/
 
-.btn, .btn1 {
-    background: #4BAED4;
-}
+/*.btn, .btn1 {*/
+/*background: #4BAED4;*/
+/*}*/
 
-.btn:hover, .btn1:hover, .btn2:hover {
-    background: #96ca33;
-    text-decoration: none;
-}
+/*.btn:hover, .btn1:hover, .btn2:hover {*/
+/*background: #96ca33;*/
+/*text-decoration: none;*/
+/*}*/
 
-.btn2 {
-    background: #aaa;
-}
+/*.btn2 {*/
+/*background: #aaa;*/
+/*}*/
 
-.btn2:hover {
-    background: #999;
-}
+/*.btn2:hover {*/
+/*background: #999;*/
+/*}*/
 
-.btn3 {
-    text-align: center;
-    display: inline-block;
-    border: solid 1px #999;
-    cursor: pointer;
-    padding: 3px 6px;
-    background: -moz-linear-gradient(top, #fff, #dcdcdc);
-    background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#dcdcdc));;
-}
+/*.btn3 {*/
+/*text-align: center;*/
+/*display: inline-block;*/
+/*border: solid 1px #999;*/
+/*cursor: pointer;*/
+/*padding: 3px 6px;*/
+/*background: -moz-linear-gradient(top, #fff, #dcdcdc);*/
+/*background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#dcdcdc));;*/
+/*}*/
 
-.btn3:hover {
-    background: -moz-linear-gradient(top, #fff, #bbbbbb);
-    background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#bbbbbb));;
-}
+/*.btn3:hover {*/
+/*background: -moz-linear-gradient(top, #fff, #bbbbbb);*/
+/*background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#bbbbbb));;*/
+/*}*/
 
 /* ====================================================================================
 /* ===================================--|尺寸|--========================================
@@ -358,6 +404,10 @@ table.table2 tbody th, table.table2 tbody td {
 
 .w60 {
     width: 60px;
+}
+
+.w70 {
+    width: 70px;
 }
 
 .w80 {
@@ -533,16 +583,16 @@ div.page1 span.count {
 /* ====================================================================================
 /* ===================================--|表单|--========================================
 /* ====================================================================================*/
-input[type="text"],input[type="password"], input[type="file"],textarea {
+
+input[type="text"], input[type="password"], input[type="file"], textarea {
     background-color: #FFFFFF;
-    border: 1px solid #CCCCCC;
     box-shadow: 2px 2px 2px #F0F0F0 inset;
     font-family: inherit;
     font-size: 100%;
     line-height: 18px;
     margin: 0;
     vertical-align: middle;
-    padding: 6px 10px;
+    padding: 3px 6px;
     border: 2px solid #DDDDDD;
 
 }
@@ -553,36 +603,34 @@ select {
     box-shadow: 2px 2px 2px #F0F0F0 inset;
     font-family: inherit;
     font-size: 100%;
-    line-height: 18px;
 }
 
-select {
-    height: 28px;
-    line-height: 25px;
-}
+/*select {*/
+/*height: 28px;*/
+/*line-height: 25px;*/
+/*}*/
 
-textarea {
-    padding: 3px 6px;
-    border: 2px solid #DDDDDD;
-}
+/*textarea {*/
+/*padding: 3px 6px;*/
+/*border: 2px solid #DDDDDD;*/
+/*}*/
 
+/*option {*/
+/*padding: 3px 3px 3px;*/
+/*cursor: pointer;*/
+/*}*/
 
-option {
-    padding: 3px 3px 3px;
-    cursor: pointer;
-}
-
-.radio {
-    vertical-align: middle;
-    line-height: 20px;
-}
+/*.radio {*/
+/*vertical-align: middle;*/
+/*line-height: 20px;*/
+/*}*/
 
 /* ====================================================================================
 /* ===================================--|提示信息|--========================================
 /* ====================================================================================*/
 .label, .message {
     font-size: 12px;
-    color: #999999;
+    /*color: #999999;*/
     display: inline-block;
     margin-left: 15px;
 }
@@ -656,16 +704,16 @@ div.menu span {
 }
 
 /***********模态弹出框******************/
-div.modal {
-    width: 650px;
-    height: auto;
-    overflow: hidden;
-    background: #fff;
-    position: absolute;
-    z-index: 999;
-    border: solid 1px #03565E;
-    box-shadow: 0px 3px 26px #333;
-}
+/*div.modal {*/
+/*width: 650px;*/
+/*height: auto;*/
+/*overflow: hidden;*/
+/*background: #fff;*/
+/*position: absolute;*/
+/*z-index: 999;*/
+/*border: solid 1px #03565E;*/
+/*box-shadow: 0px 3px 26px #333;*/
+/*}*/
 
 div.modal div.modal_title {
     height: 35px;
@@ -721,7 +769,10 @@ div.modal_message div.error {
 div.modal_message div.error strong {
     background: url(../img/ico_face.jpg) -468px -336px no-repeat;
 }
-
+/*确定按钮*/
+div.modal a.hd_success{
+    display: inline-block;margin-right: 20px;
+}
 /**********简单对话框**************/
 div#hd_message {
     border: solid 3px #dcdcdc;
@@ -747,15 +798,19 @@ div.dialog {
     z-index: 9999;
 }
 
-div.dialog h2 {
+div.dialog h2#dialog_title {
     background: #03565E;
     margin-bottom: 0;
+    margin-top: 0px;
     height: 30px;
     overflow: hidden;
     text-indent: 10px;
     color: #fff;
     font-size: 14px;
     line-height: 2em;
+    top: 0px;
+    position: absolute;
+    width: 300px;
 }
 
 div.dialog div.close {
@@ -766,6 +821,8 @@ div.dialog div.close {
     width: 21px;
     line-height: 21px;
     text-align: center;
+    z-index: 1000;
+    color: #fff;
 }
 
 div.dialog div.close a {
@@ -802,6 +859,8 @@ div.dialog div.con {
 
 div.dialog div.success {
     background: none;
+    position: absolute;
+    top: 30px;
 }
 
 div.dialog strong {
@@ -813,11 +872,18 @@ div.dialog strong {
     margin-top: -6px;
 }
 
+div.dialog div.con span {
+    float: left;
+    text-indent: 8px;
+}
+
 div.dialog div.success strong {
     background: url(../img/ico_face.jpg) -466px -6px no-repeat;
 }
 
 div.dialog div.error {
+    position: absolute;
+    top: 30px;
     background: none;
 }
 

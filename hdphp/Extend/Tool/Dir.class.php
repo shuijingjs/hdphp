@@ -113,7 +113,7 @@ final class Dir
      * @param string $dirName 目录名
      * @return bool
      */
-    static function del($dirName)
+    static public function del($dirName)
     {
         if (is_file($dirName)) {
             unlink($dirName);
@@ -123,7 +123,7 @@ final class Dir
         foreach (glob($dirPath . "*") as $v) {
             is_dir($v) ? self::del($v) : unlink($v);
         }
-        return rmdir($dirName);
+        return @rmdir($dirName);
     }
 
     /**
@@ -132,7 +132,7 @@ final class Dir
      * @param int $auth 权限
      * @return bool
      */
-    static function create($dirName, $auth = 0755)
+    static public function create($dirName, $auth = 0755)
     {
         $dirPath = self::dirPath($dirName);
         if (is_dir($dirPath))
@@ -155,7 +155,7 @@ final class Dir
      * @param bool $strip_space 去空白去注释
      * @return bool
      */
-    static function copy($olddir, $newdir, $strip_space = false)
+    static public function copy($olddir, $newdir, $strip_space = false)
     {
         $olddir = self::dirPath($olddir);
         $newdir = self::dirPath($newdir);
@@ -180,6 +180,28 @@ final class Dir
             }
         }
         return true;
+    }
+
+    /**
+     * 目录下创建安全文件
+     * @param $dirName 操作目录
+     * @param bool $recursive 为true会递归的对子目录也创建安全文件
+     */
+    static public function safeFile($dirName, $recursive = false)
+    {
+        //记录已经操作过的目录
+        static $s = array();
+        $file = HDPHP_TPL_PATH . '/index.html';
+        if (!is_dir($dirName)) return;
+        $dirPath = self::dirPath($dirName);
+        is_file($dirPath . 'index.html') || copy($file, $dirPath . 'index.html');
+        foreach (glob($dirPath . "*") as $d) {
+            if (is_dir($d) && !in_array($d, $s)) {
+                $s[] = $d;
+                is_file($d . '/index.html') || copy($file, $d . '/index.html');
+                $recursive && self::safeFile($d);
+            }
+        }
     }
 
 }

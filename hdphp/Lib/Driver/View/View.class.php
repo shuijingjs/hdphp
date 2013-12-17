@@ -33,7 +33,7 @@ abstract class View
                     $tplFile .= C("TPL_FIX");
                 }
                 if (!is_file($tplFile)) {
-                    throw_exception(L("view_getTemplateFile_error3") . $tplFile); //模版文件不存在
+                    DEBUG and error(L("view_getTemplateFile_error3") . $tplFile); //模版文件不存在
                 }
                 return $tplFile;
             }
@@ -59,7 +59,7 @@ abstract class View
         }
         //将目录全部转为小写
         if (!is_file($tplFile)) {
-            throw_exception(L("view_getTemplateFile_error3") . $tplFile); //模版文件不存在
+            halt(L("view_getTemplateFile_error3") . $tplFile); //模版文件不存在
         }
         return $tplFile;
     }

@@ -16,19 +16,14 @@ final class HDPHP
      */
     static public function init()
     {
-        //解析URL
-        if (IS_GROUP) {
-            //应用组配置
-            if (is_file(COMMON_PATH . 'Config/config.php')) {
-                C(require(COMMON_PATH . 'Config/config.php'));
-            }
-            //解析URL与路由
-            Route::group();
-        }
+        //应用组模式URL解析
+        IS_GROUP and  Route::group();
         //应用
         define("APP", ucfirst(IS_GROUP ? $_GET[C('VAR_APP')] : basename(substr(APP_PATH, 0, -1))));
         //应用目录
-        IS_GROUP and define("APP_PATH", MODULE_PATH . APP . '/');
+        $group = isset($_GET[C("VAR_GROUP")]) ? $_GET[C("VAR_GROUP")] : C("DEFAULT_GROUP");
+        define("APP_GROUP", $group);
+        IS_GROUP and define("APP_PATH", GROUP_PATH . APP_GROUP . '/' . APP . '/');
         //常量
         defined("CONTROL_PATH") or define("CONTROL_PATH", APP_PATH . 'Control/');
         defined("MODEL_PATH") or define("MODEL_PATH", APP_PATH . 'Model/');
@@ -37,9 +32,9 @@ final class HDPHP
         defined("LANGUAGE_PATH") or define("LANGUAGE_PATH", APP_PATH . 'Language/');
         defined("TAG_PATH") or define("TAG_PATH", APP_PATH . 'Tag/');
         defined("LIB_PATH") or define("LIB_PATH", APP_PATH . 'Lib/');
-        defined("COMPILE_PATH") or define("COMPILE_PATH", TEMP_PATH . (IS_GROUP ? APP . '/Compile/' : 'Compile/'));
-        defined("CACHE_PATH") or define("CACHE_PATH", TEMP_PATH . (IS_GROUP ? APP . '/Cache/' : 'Cache/'));
-        defined("TABLE_PATH") or define("TABLE_PATH", TEMP_PATH . (IS_GROUP ? APP . '/Table/' : 'Table/'));
+        defined("COMPILE_PATH") or define("COMPILE_PATH", TEMP_PATH . (IS_GROUP ? APP_GROUP.'/'.APP . '/Compile/' : 'Compile/'));
+        defined("CACHE_PATH") or define("CACHE_PATH", TEMP_PATH . (IS_GROUP ? APP_GROUP.'/'.APP . '/Cache/' : 'Cache/'));
+        defined("TABLE_PATH") or define("TABLE_PATH", TEMP_PATH . (IS_GROUP ? APP_GROUP.'/'.APP . '/Table/' : 'Table/'));
         defined("LOG_PATH") or define("LOG_PATH", TEMP_PATH . 'Log/');
         //应用配置
         $app_config = CONFIG_PATH . 'config.php';
@@ -69,7 +64,6 @@ final class HDPHP
         define('IS_PUT', REQUEST_METHOD == 'PUT' ? true : false);
         define("IS_AJAX", ajax_request());
         define('IS_DELETE', REQUEST_METHOD == 'DELETE' ? true : false);
-
         //注册自动载入函数
         spl_autoload_register(array(__CLASS__, "autoload"));
         //设置错误处理函数
@@ -103,15 +97,15 @@ final class HDPHP
         $class = ucfirst($className) . '.class.php'; //类文件
         if (substr($className, -5) == "Model") {
             if (require_array(array(
-                MODEL_PATH . $class,
                 HDPHP_DRIVER_PATH . 'Model/' . $class,
+                MODEL_PATH . $class,
                 COMMON_MODEL_PATH . $class
             ))
             ) return;
         } elseif (substr($className, -7) == "Control") {
             if (require_array(array(
-                CONTROL_PATH . $class,
                 HDPHP_CORE_PATH . $class,
+                CONTROL_PATH . $class,
                 COMMON_CONTROL_PATH . $class
             ))
             ) return;
@@ -125,7 +119,12 @@ final class HDPHP
                 HDPHP_DRIVER_PATH . 'Cache/' . $class,
             ))
             ) return;
-        } elseif (substr($className, 0, 7) == "Session") {
+        } elseif (substr($className, 0,4) == "View") {
+            if (require_array(array(
+                HDPHP_DRIVER_PATH . 'View/' . $class,
+            ))
+            ) return;
+        }elseif (substr($className, 0, 7) == "Session") {
             if (require_array(array(
                 HDPHP_DRIVER_PATH . 'Session/' . $class
             ))
@@ -142,7 +141,7 @@ final class HDPHP
                 COMMON_TAG_PATH . $class
             ))
             ) return;
-        } elseif (alias_import($className)) {
+        }  elseif (alias_import($className)) {
             return;
         } elseif (require_array(array(
             EVENT_PATH . $class,

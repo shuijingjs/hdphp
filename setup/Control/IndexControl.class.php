@@ -21,10 +21,11 @@ class IndexControl extends SetupControl
     //删除缓存
     function delcache()
     {
-        $temp = q("temp");
+        $temp = Q("temp");
         $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "";
         if ($temp) {
-            Dir::del($_GET['temp']);
+            foreach (glob($temp . '/*') as $d)
+                Dir::del($d);
         }
         $this->success("缓存目录已经全部删除成功", $url);
     }

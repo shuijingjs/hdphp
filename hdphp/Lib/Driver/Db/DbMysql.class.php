@@ -85,7 +85,7 @@ class DbMysql extends Db
             $insert_id = mysql_insert_id($this->link);
             return $insert_id ? $insert_id : true;
         } else {
-            $this->error(mysql_errno($this->lin) . "\t" . $sql);
+            $this->error(mysql_errno($this->link) . "\t" . $sql);
             return false;
         }
     }

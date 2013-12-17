@@ -31,38 +31,41 @@ function M($tableName = null, $full = null)
 }
 
 /**
- * @param $model 扩展模型名称
+ * @param $class 扩展模型名称不需要加Model后缀
  * @param $table 表名
  * @param $param 其他参数
- * @return Model
+ * @return Object Model
  */
-function K($model, $table = false, $param = array())
+function K($class, $table = false, $param = array())
 {
-    //获得模型文件
-    $info = explode('/', trim($model, '/'));
-    switch (count($info)) {
-        case 1:
-            $class = $info[0] . C('MODEL_FIX');
-            $path = MODEL_PATH;
-            break;
-        case 2:
-            $class = $info[1] . C('MODEL_FIX');
-            $path = APP_PATH . '../' . $info[0] . '/Model/';
-            break;
-        default:
-            $class = basename($model) . C('MODEL_FIX');
-            $path = dirname($model);
-    }
-    $class = ucfirst($class);
-    if (!import($class, $path)) {
-        //还没有定义模型文件
-        error(L("functions_k_is_file") . $path . $class . '.class.php', false);
-    }
-    if (!class_exists($class, false)) {
-        error(L("functions_k_error") . $class, false); //模型类定义有误
-    }
-    $table = $table === false ? substr(strtolower($class), 0, -strlen(C("MODEL_FIX"))) : $table;
+    $table = $table === false ? strtolower($class) : $table;
+    $class .= "Model";
     return new $class($table, $param);
+//    //获得模型文件
+//    $info = explode('/', trim($model, '/'));
+//    switch (count($info)) {
+//        case 1:
+//            $class = $info[0] . C('MODEL_FIX');
+//            $path = MODEL_PATH;
+//            break;
+//        case 2:
+//            $class = $info[1] . C('MODEL_FIX');
+//            $path = APP_PATH . '../' . $info[0] . '/Model/';
+//            break;
+//        default:
+//            $class = basename($model) . C('MODEL_FIX');
+//            $path = dirname($model);
+//    }
+//    $class = ucfirst($class);
+//    if (!import($class, $path)) {
+//        //还没有定义模型文件
+//        error(L("functions_k_is_file") . $path . $class . '.class.php', false);
+//    }
+//    if (!class_exists($class, false)) {
+//        error(L("functions_k_error") . $class, false); //模型类定义有误
+//    }
+//    $table = $table === false ? substr(strtolower($class), 0, -strlen(C("MODEL_FIX"))) : $table;
+//    return new $class($table, $param);
 }
 
 /**
@@ -213,7 +216,7 @@ function import($class = null, $base = null, $ext = ".class.php")
             $base = APP_PATH;
             $class = substr_replace($class, '', 0, strlen($info[0]) + 1);
         } elseif (strtoupper($info[0]) == 'HDPHP') {
-            $base = dirname(substr_replace($class, HDPHP_PATH, 0, 5));
+            $base = dirname(substr_replace($class, HDPHP_PATH, 0, 6));
             $class = basename($class);
         } elseif (in_array(strtoupper($info[0]), array("LIB", "ORG"))) {
             $base = APP_PATH;
@@ -223,7 +226,8 @@ function import($class = null, $base = null, $ext = ".class.php")
             $class = substr_replace($class, '', 0, strlen($info[0]) + 1);
         }
     }
-    $base = rtrim($base, '/') . '/';
+    if (substr($base, -1) != '/')
+        $base .= '/';
     $file = $base . $class . $ext;
     if (!class_exists($class, false)) {
         return require_cache($file);
@@ -426,6 +430,8 @@ function event($name, &$param = array())
     if (is_array($group)) {
         if ($event) {
             $event = array_merge($group, $event);
+        } else {
+            $event = $group;
         }
     }
     if (is_array($event)) {
@@ -881,29 +887,6 @@ function _request($method, $varName = null, $html = true)
         $data[$varName] = htmlspecialchars($data[$varName]);
     }
     return isset($data[$varName]) ? $data[$varName] : null;
-}
-
-/**
- * 404错误
- * @param string $msg 提示信息
- * @param string $filePath 404模板文件
- */
-function _404($msg = "", $filePath = "")
-{
-    DEBUG && error($msg);
-    //写入日志
-    Log::write($msg);
-    //把Notice Warning写入Log
-    Log::save();
-    if (empty($filePath) && C("404_TPL")) {
-        $filePath = C("404_TPL");
-    }
-    //文件不可操作
-    set_http_state(404);
-    if (is_file($filePath) && is_readable($filePath)) {
-        include $filePath;
-    }
-    exit;
 }
 
 /**

@@ -13,10 +13,21 @@
 // '-----------------------------------------------------------------------------------
 //去除超链接虚线
 $(function () {
-    $("a,select").click(function () {
+    $("a").click(function () {
         $(this).trigger("blur")
     });
 })
+//新窗口打开链接
+function _open(url) {
+    window.open(url, "");
+}
+//关闭窗口
+function _close(msg) {
+    if (msg) {
+        if (!confirm(msg))return;
+    }
+    window.close()
+}
 /**
  * 获得对象在页面中心的位置
  * @author hdxj
@@ -77,7 +88,7 @@ $.extend({
         var _default = {
             "type": "success"//类型 CSS样式
             , "msg": "msg属性配置错误"//提示信息
-            , "timeout": 3//自动关闭时间
+            , "timeout": 2//自动关闭时间
             , "close_handler": function () {
             }//关闭时的回调函数
         };
@@ -85,12 +96,12 @@ $.extend({
         //创建元素
         if ($("div.dialog").length == 0) {
             var div = '';
-            div += '<div class="dialog" style="z-index: 1000;">';
+            div += '<div class="dialog" style="z-index: 1000;position: absolute">';
             div += '<div class="close">';
             div += '<a href="#" title="关闭">×</a></div>';
-            div += '<h2>提示信息</h2>';
+            div += '<h2 id="dialog_title">提示信息</h2>';
             div += '<div class="con ' + opt.type + '"><strong>ico</strong>';
-            div += opt.msg;
+            div += '<span>' + opt.msg + '</span>';
             div += '</div>';
             div += '</div>';
             div += '<div class="dialog_bg" style="background: #f3f3f3;position:absolute;left:0px;top:0px;z-index: 100;"></div>'
@@ -163,7 +174,7 @@ $.extend({
         $("div.modal").remove();
         var div = '';
         var show = opt.show ? "" : ";display:none;"
-        div += '<div class="modal" style="width:' + opt['width'] + 'px;' + show + 'height:' + (opt['height'] ? opt['height'] : 'auto') + 'px;z-index:1000">';
+        div += '<div class="modal" style="position:absolute;left:50%;top:50%;margin-top:-' + (opt['height'] / 2 + 150) + 'px;margin-left:-' + (opt['width'] / 2) + 'px;width:' + opt['width'] + 'px;' + show + 'height:' + opt['height'] + 'px;z-index:1000">';
         if (opt['title']) {
             div += '<div class="modal_title">' + opt['title'] + '</div>';
         }
@@ -177,21 +188,21 @@ $.extend({
         div += '</div>';
         if (opt.button) {
             div += '<div class="modal_footer" ' + (opt.message ? 'style="text-align:center"' : "") + '>';
-            div += '<a href="javascript:;" class="btn">' + opt.send_title + '</a>';
-            div += '<a href="javascript:;" class="btn2 close">' + opt.cancel_title + '</a>';
+            div += '<a href="javascript:;" class="btn btn-primary hd_success">' + opt.send_title + '</a>';
+            if (opt.cancel_title)
+                div += '<a href="javascript:;" class="btn hd_close">' + opt.cancel_title + '</a>';
             div += '</div>';
         }
         div += '</div>';
         div += '<div class="modal_bg" style="background: #f3f3f3;position:absolute;left:0px;display:none;top:0px;z-index: 900;"></div>';
         $(div).appendTo("body");
         var pos = center_pos($(".modal"));
-        $("div.modal").css({left: pos[0], top: pos[1] - 50});
         //点击确定
-        $("div.modal_footer a.btn").click(function () {
+        $("div.modal_footer a.hd_success").click(function () {
             if (opt.send) {
                 opt.send();
             } else {
-                $("div.modal_footer a.close").trigger("click");
+                $("div.modal_footer a.hd_close").trigger("click");
             }
         })
         var _w = $(document).width();
@@ -202,13 +213,14 @@ $.extend({
         }
         //点击关闭modal
         if (opt.cancel) {
-            $("div.modal_footer a.close").click(opt.cancel);
+            $("div.modal_footer a.hd_close").live("click", opt.cancel);
         } else {
-            $("div.modal_footer a.close").click(function () {
+            $("div.modal_footer a.hd_close").bind("click", function () {
                 $(this).parents("div.modal").eq(0).fadeOut(function () {
                     $(this).parents("div.modal").eq(0).remove();
                 });
                 $("div.modal_bg").remove();
+                return false;
             })
         }
     }
@@ -523,6 +535,10 @@ $.fn.extend({
                 }
                 //设置默认提示信息
                 method.setDefaultMessage(name, spanObj);
+                //确认密码加属性confirm
+                if(options[name]['rule']['confirm']){
+                    $(fieldObj).attr("confirm",1);
+                }
                 fieldObj.live("blur", function (event, send) {
                     //没有设置required必须验证时，默认为不用验证
                     options[name].rule.required || (options[name].rule.required = false);
@@ -598,7 +614,7 @@ $.fn.extend({
     },
     //验证表单
     is_validation: function () {
-        $(this).find("*[validation='0']").trigger("blur");
+        $(this).find("[validation='0'],[confirm]").trigger("blur");
         if ($(this).find("*[validation='0']").length > 0) {
             return false;
         }

@@ -1,19 +1,25 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-
 <style type="text/css">
     #hd_debug {
         padding: 10px;
-        margin: 0px;
-        font: 12px/20px "微软雅黑";
+        font: 12px/20px;
+        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
         clear: both;
-        border: solid 1px #dcdcdc;
-        margin: 20px;
+        border: solid 1px #cccccc;
+        border-bottom: none;
         background-color: #fff;
         width: 800px;
+        height: auto;
+        overflow: hidden;
         word-wrap: word-break;
         word-break: break-word;
-        display:none;
+        position: fixed;
+        /*top: 200px;*/
+        left: 0px;
+        bottom: 0px;
+        z-index: 2000;
+        display: none;
+        /*box-shadow: 0px 3px 3px #dcdcdc;*/
     }
 
     #hd_debug * {
@@ -111,30 +117,44 @@
         font-size: 12px;
         line-height: 10px;
     }
-    #hd_debug_bt{
-        position: absolute;
-        border:solid 1px #dcdcdc;
-        padding:5px 5px;
-        font-size:14px;
+
+    /*html {*/
+        /*background: url(about:blank) fixed;*/
+    /*}*/
+
+    #hd_debug_bt {
+        border: solid 1px #dcdcdc;
+        background: url("<?php echo __HDPHP_DATA__;?>/Image/debug.png") no-repeat;
         border-radius: 5px;
         cursor: pointer;
-        background: #ececec;
-        z-index: 1000;
-        display: none;
+        z-index: 2000;
+        width: 25px;
+        height:25px;
+        text-indent: -9999px;
+        position: fixed;
+        right: 5px;
+        bottom: 5px;
+        position: fixed;
+        top:50%;
+        right:20px;
+        /*_position: absolute;*/
+        /*_right: 10px;*/
+        /*_top: expression(document.documentElement.clientHeight-this.*/
+        /*offsetHeight-50-document.documentElement.scrollTop);*/
+        display:block;
     }
 </style>
 <!--右下角图标-->
 <div id="hd_debug">
     <?php if(C("DEBUG_MENU")):?>
     <div class="debug_link">
-        <a href="javascript:void(0)" onclick='document.getElementById("hd_debug").style.display="none"'>隐藏</a>
         <a href='<?php echo dirname(__HDPHP__).'/setup/index.php'?>?c=rbac'
         target='_blank'>配置RBAC</a>
         <a href='<?php echo dirname(__HDPHP__).'/setup/index.php'?>?c=session&path_root=%2Fwww%2Fhdphp%2Fexample%2FApp%2F&app=http%3A%2F%2Flocalhost%2Fhdphp%2Fexample%2FApp%2Findex.php%2F1%2FIndex%2Findex'
         target='_blank'>配置SESSION</a>
         <a href='<?php echo dirname(__HDPHP__).'/setup/index.php'?>?m=delcache&temp=<?php echo realpath(TEMP_PATH);?>
         '>删除缓存数据</a>
-        
+
     </div>
     <?php endif;?>
     <!--系统信息-->
@@ -195,7 +215,7 @@
             </thead>
             <?php foreach (self::$tpl as $k => $v):?>
             <tr>
-                <td style="font-size:12px;width:80px;padding:6px;"><?php echo $v[0]?></td>
+                <td style="font-size:12px;width:100px;padding:6px;"><?php echo $v[0]?></td>
                 <td style="font-size:12px;padding:6px;">
                     <?php echo str_replace(array(" / ", "\\"), DS, $v[1])?>
                 </td>
@@ -275,44 +295,21 @@
 </div>
 <div id="hd_debug_bt">HDPHP</div>
 <script>
-		var oHdDebug = document.getElementById('hd_debug');	
-	  	var initScH = getScrollTop();		//记录初始位置
-	  	setScrollTop(10000000);
-	  	var iDwH = document.documentElement.clientHeight || document.body.clientHeight;	//窗口高度 
-	  	var iScH = getScrollTop();
-		//窗口没有产生滚动条
-		if(iScH == 0){
-			var oBody = document.getElementsByTagName('body')[0];
-			var aChildNode = oBody.childNodes;	//查询body子节点
-			var iMax = 0;
-			//计算占用窗口最高的元素
-			for(var i=0,len=aChildNode.length;i<len;i++){
-				var iH = Number(aChildNode[i].offsetHeight);
-				var iT = Number(aChildNode[i].offsetTop);
-				if(isNaN(iH) || isNaN(iT)) continue;
-				if(iMax<iH+iT){
-					iMax=iH+iT;
-				}
-			}
-			//更新iDwH值
-			iDwH = iMax;
-		}
-		//设置debug样式
-		oHdDebug.style.position = 'absolute';
-		oHdDebug.style.top = (iScH+iDwH)+'px';
-		oHdDebug.style.display = 'block';
-		setScrollTop(initScH);
-		//获取滚动条位置
-		function getScrollTop(){
-			return document.documentElement.scrollTop  || document.body.scrollTop;		//滚动条高度
-		}
-		//设置滚动条位置
-		function setScrollTop(num){
-			document.documentElement.scrollTop = num;	
-	  		document.body.scrollTop = num;
-		}
-
-	
+    var _hd_debug_bt = document.getElementById("hd_debug_bt");
+    var _hd_debug = document.getElementById("hd_debug");
+    document.getElementById("hd_debug_bt").onclick = function () {
+        if (_hd_debug.style.display) {
+            _hd_debug.style.display = "";
+        } else {
+            var _t = document.body.scrollTop+200;
+            _hd_debug.style.display = "block";
+//            var _t = Math.max(document.body.clientHeight-_hd_debug.offsetHeight-20,0)+document.body.scrollTop;
+//            _hd_debug.style.top=_t+"px";
+        }
+    }
+    //f11显示debug
+    document.onkeydown=function(event){
+    }
 </script>
 <script language="javascript" type="text/javascript" defer="defer">
     javascript:(function () {

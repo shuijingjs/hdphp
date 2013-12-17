@@ -58,9 +58,9 @@ final class ViewFactory
         if (isset($this->driverList[$driver])) {
             return $this->driverList[$driver];
         }
-        $class = ucfirst($driver) . "View";
-        $classFile = HDPHP_DRIVER_PATH.'View/Driver/' . $class . '.class.php'; //类文件
-	require_cache($classFile); //加载类文件
+        $class = "View" . ucfirst($driver);
+        //加载类文件
+        import($class, HDPHP_DRIVER_PATH . 'View/');
         $this->driverList[$driver] = new $class(); //视图操作引擎对象
         return true;
     }

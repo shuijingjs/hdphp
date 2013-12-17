@@ -180,7 +180,6 @@ abstract class Control
     {
         if (is_null($this->view)) {
             //获得视图驱动含hd模板引擎与smarty引擎
-            require_cache(HDPHP_DRIVER_PATH . 'View/ViewFactory.class.php');
             $this->view = ViewFactory::factory();
         }
     }

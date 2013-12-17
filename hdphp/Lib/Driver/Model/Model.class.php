@@ -385,7 +385,7 @@ class Model
     public function field($field = array(), $check = true)
     {
         if (empty($field)) return $this;
-        call_user_func(array($this->db, __FUNCTION__), $field, $check);
+        $this->db->field($field, $check);
         return $this;
     }
 
@@ -396,7 +396,7 @@ class Model
      */
     public function cache($time = -1)
     {
-        call_user_func(array($this->db, __FUNCTION__), $time);
+        $this->db->cache($time);
         return $this;
     }
 
@@ -404,7 +404,7 @@ class Model
     public function like()
     {
         $args = func_get_args();
-        call_user_func_array(array($this->db, __FUNCTION__), $args);
+        $this->db->like($args);
         return $this;
     }
 
@@ -414,7 +414,7 @@ class Model
     public function group($arg = array())
     {
         if (empty($arg)) return $this;
-        call_user_func(array($this->db, __FUNCTION__), $arg);
+        $this->db->group($arg);
         return $this;
     }
 
@@ -424,7 +424,7 @@ class Model
     public function having($arg = array())
     {
         if (empty($arg)) return $this;
-        call_user_func(array($this->db, __FUNCTION__), $arg);
+        $this->db->having($arg);
         return $this;
     }
 
@@ -435,8 +435,7 @@ class Model
     public function order($arg = array())
     {
         if (empty($arg)) return $this;
-
-        call_user_func(array($this->db, __FUNCTION__), $arg);
+        $this->db->order($arg);
         return $this;
     }
 
@@ -444,12 +443,17 @@ class Model
      * LIMIT 语句定义
      * 示例：$Db->limit(10)->all("sex=1");
      */
-    public function limit()
+    public function limit($start = null, $end = null)
     {
-        $arg = func_get_args();
-        if (empty($arg)) return $this;
-        $arg = is_array($arg[0]) ? $arg[0] : $arg;
-        call_user_func(array($this->db, __FUNCTION__), $arg);
+        if (is_null($start)) return $this;
+        if (is_array($start)) {
+            $limit = $start;
+        } else if (!is_null($end)) {
+            $limit = $start . "," . $end;
+        } else {
+            $limit = $start;
+        }
+        $this->db->limit($limit);
         return $this;
     }
 
@@ -460,7 +464,7 @@ class Model
     public function in($arg = array())
     {
         if (empty($arg)) return $this;
-        call_user_func(array($this->db, __FUNCTION__), $arg);
+        $this->db->in($arg);
         return $this;
     }
 
@@ -470,7 +474,7 @@ class Model
      */
     public function del($data = array())
     {
-        return call_user_func(array($this, 'delete'), $data);
+        return $this->delete($data);
     }
 
     /**
@@ -480,7 +484,7 @@ class Model
     public function delAll($data = array())
     {
         $this->where("1=1");
-        return call_user_func(array($this, 'delete'), $data);
+        return $this->delete($data);
     }
 
     /**
@@ -490,7 +494,7 @@ class Model
     public function delete($data = array())
     {
         $this->trigger and $this->__before_del();
-        $result = call_user_func(array($this->db, __FUNCTION__), $data);
+        $result = $this->db->delete($data);
         $this->result = $result;
         $this->error = $this->db->error;
         $this->trigger and $this->__after_del();
@@ -504,17 +508,16 @@ class Model
      */
     public function query($data = array())
     {
-        return call_user_func(array($this->db, __FUNCTION__), $data);
+        return $this->db->query($data);
     }
 
     /**
      * 执行一个SQL语句  没有有返回值
      * 示例：$Db->exe("delete from hd_news where id=16");
      */
-    public function exe()
+    public function exe($sql)
     {
-        $args = func_get_args();
-        $stat = call_user_func_array(array($this->db, __FUNCTION__), $args);
+        $stat = $this->db->exe($sql);
         $this->init();
         return $stat;
     }
@@ -526,7 +529,7 @@ class Model
     public function find($data = array())
     {
         $this->limit(1);
-        $result = call_user_func(array($this, 'select'), $data);
+        $result = $this->select($data);
         return is_array($result) && isset($result[0]) ? $result[0] : $result;
     }
 
@@ -536,7 +539,7 @@ class Model
      */
     public function one($data = array())
     {
-        return call_user_func(array($this, 'find'), $data);
+        return $this->find($data);
     }
 
     /**
@@ -544,7 +547,7 @@ class Model
      */
     public function findAll($args = array())
     {
-        return call_user_func(array($this, 'select'), $args);
+        return $this->select($args);
     }
 
     /**
@@ -553,7 +556,7 @@ class Model
      */
     public function all($args = array())
     {
-        return call_user_func(array($this, 'select'), $args);
+        return $this->select($args);
     }
 
     /**
@@ -563,7 +566,7 @@ class Model
     public function select($args = array())
     {
         $this->trigger and $this->__before_select();
-        $result = call_user_func(array($this->db, __FUNCTION__), $args);
+        $result = $this->db->select($args);
         $this->result = $result;
         $this->trigger and $this->__after_select();
         $this->error = $this->db->error;
@@ -579,7 +582,7 @@ class Model
     {
 
         if (!empty($data)) {
-            call_user_func(array($this->db, __FUNCTION__), $data);
+            $this->db->where($data);
         }
         return $this;
     }
@@ -617,7 +620,7 @@ class Model
             return false;
         }
         $this->error = $this->db->error;
-        $result = call_user_func(array($this->db, __FUNCTION__), $data);
+        $result = $this->db->update($data);
         $this->result = $result;
         $this->trigger and $this->__after_update();
         $this->init();
@@ -625,10 +628,9 @@ class Model
     }
 
     //更新记录
-    public function save()
+    public function save($data = array())
     {
-        $args = func_get_args();
-        return call_user_func_array(array($this, 'update'), $args);
+        return $this->update($data);
     }
 
     //插入数据
@@ -642,7 +644,7 @@ class Model
             $this->init();
             return false;
         }
-        $result = call_user_func(array($this->db, __FUNCTION__), $data, $type);
+        $result = $this->db->insert($data, $type);
         $this->result = $result;
         $this->error = $this->db->error;
         $this->trigger and $this->__after_add();
@@ -653,13 +655,13 @@ class Model
     //replace方式插入数据
     public function replace($data = array())
     {
-        return call_user_func(array($this, 'insert'), $data, "REPLACE");
+        return $this->insert($data, "REPLACE");
     }
 
     //插入数据
     public function add($data = array())
     {
-        return call_user_func(array($this, 'insert'), $data);
+        return $this->insert($data);
     }
 
 
@@ -681,14 +683,24 @@ class Model
         return false;
     }
 
+    /**
+     * 统计
+     */
+    public function count($args = array())
+    {
+        $result = $this->db->count($args);
+        $this->init();
+        return $result;
+    }
 
     /**
      * 求最大值
      */
     public function max($args = array())
     {
+        $result = $this->db->max($args);
         $this->init();
-        return call_user_func(array($this->db, __FUNCTION__), $args);
+        return $result;
     }
 
     /**
@@ -696,8 +708,9 @@ class Model
      */
     public function min($args = array())
     {
+        $result = $this->db->min($args);
         $this->init();
-        return call_user_func(array($this->db, __FUNCTION__), $args);
+        return $result;
     }
 
     /**
@@ -705,8 +718,9 @@ class Model
      */
     public function avg($args = array())
     {
+        $result = $this->db->avg($args);
         $this->init();
-        return call_user_func(array($this->db, __FUNCTION__), $args);
+        return $result;
     }
 
     /**
@@ -714,17 +728,9 @@ class Model
      */
     public function sum($args = array())
     {
+        $result = $this->db->sum($args);
         $this->init();
-        return call_user_func(array($this->db, __FUNCTION__), $args);
-    }
-
-    /**
-     * 统计
-     */
-    public function count($args = array())
-    {
-        $this->init();
-        return call_user_func(array($this->db, __FUNCTION__), $args);
+        return $result;
     }
 
 
@@ -751,7 +757,7 @@ class Model
         $this->data($data);
         $data = $this->data;
         $data = $data ? $data : $_GET;
-        return call_user_func(array($this->db, __FUNCTION__), $data);
+        return $this->db->fieldFilter($data);
     }
 
     //减少字段值
@@ -822,13 +828,13 @@ class Model
     //获得数据库或表大小
     public function getSize($table = "")
     {
-        return call_user_func(array($this->db, __FUNCTION__), $table);
+        return $this->db->getSize($table);
     }
 
     //获得表信息
     public function getTableInfo($table = array())
     {
-        return call_user_func(array($this->db, __FUNCTION__), $table);
+        return $this->db->getTableInfo($table);
     }
 
     //清空表
@@ -892,7 +898,7 @@ class Model
      */
     public function beginTrans($stat = true)
     {
-        return call_user_func_array(array($this->db, __FUNCTION__), $stat);
+        return $this->db->beginTrans($stat);
     }
 
 
@@ -924,13 +930,13 @@ class Model
     //提供一个事务
     public function commit()
     {
-        return call_user_func(array($this->db, __FUNCTION__));
+        return $this->db->commit();
     }
 
     //回滚事务
     public function rollback()
     {
-        return call_user_func(array($this->db, __FUNCTION__));
+        return $this->db->rollback();
     }
 
     //添加数据前执行的方法

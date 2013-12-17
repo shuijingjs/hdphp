@@ -230,13 +230,13 @@ abstract class Db implements DbInterface
         if (!empty($where)) {
             $this->where($where);
         }
-        //添加表前缀
-//        $chain = array("where", "group", "having", "order", "limit");
-//        foreach ($chain as $v) {
-//            $this->opt[$v] = $this->addTableFix($this->opt[$v]);
-//        }
         if (empty($this->opt['field'])) {
-            $this->opt['field'] = $this->field;
+            $this->opt['field'] = "*";
+        }
+        //添加表前缀
+        $chain = array("table", "group", "field", "order");
+        foreach ($chain as $v) {
+            $this->opt[$v] = $this->addTableFix($this->opt[$v]);
         }
         $sql = "SELECT " . $this->opt['field'] . " FROM " . $this->opt['table'] .
             $this->opt['where'] . $this->opt['group'] . $this->opt['having'] .
@@ -251,12 +251,11 @@ abstract class Db implements DbInterface
      * @param string $sql
      * @return string   格式化后的SQL
      */
-//    public function addTableFix($sql)
-//    {
-//        $sqlRemoveSign = preg_replace(array("/`\s*/i"), array("`"), $sql);
-//        $sqlRemovePreFix = str_replace($this->dbPrefix, "", $sqlRemoveSign);
-//        return preg_replace("/([,\s]+)(`)?([a-z]\w+)(`)?([^@])?\.([a-z])/i", " \\1\\2" . $this->dbPrefix . "\\3\\4\\5.\\6", $sqlRemovePreFix);
-//    }
+    private function addTableFix($sql)
+    {
+        return preg_replace("@(\w+?\.[a-z]+?)@i", C("DB_PREFIX") . '\1', $sql);
+//        return preg_replace("@(?<=[\s,=><])(\w+?\.[a-z]+?)@i", C("DB_PREFIX") . '\1', $sql);
+    }
 
     /**
      * SQL中的REPLACE方法，如果存在与插入记录相同的主键或unique字段进行更新操作
@@ -364,38 +363,56 @@ abstract class Db implements DbInterface
             $field .= isset($s[1]) ? ' AS ' . $s[1] : '';
         }
         $this->opt['field'] = $field;
-        $result = $this->select("");
-        return is_array($result) && !empty($result) ? current($result[0]) : NULL;
     }
 
     //统计记录总数
     public function count($data)
     {
-        return $this->statistics(__FUNCTION__, $data);
+        $this->statistics(__FUNCTION__, $data);
+        $result = $this->select("");
+        return is_array($result) && !empty($result) ? intval(current($result[0])) : NULL;
+//        $this->statistics(__FUNCTION__, $data);
+//        $chain = array("table", "group", "field", "order");
+//        foreach ($chain as $v) {
+//            $this->opt[$v] = $this->addTableFix($this->opt[$v]);
+//        }
+//        $sql = "SELECT count(*) FROM (SELECT " . $this->opt['field'] . " FROM " . $this->opt['table'] .
+//            $this->opt['where'] . $this->opt['group'] . $this->opt['having'] .
+//            $this->opt['order'] . $this->opt['limit'] . ") AS t";
+//        $result = $this->query($sql);
+//        return is_array($result) && !empty($result) ? current($result[0]) : NULL;
     }
 
     //查找最大的值
     public function max($data)
     {
-        return $this->statistics(__FUNCTION__, $data);
+        $this->statistics(__FUNCTION__, $data);
+        $result = $this->select("");
+        return is_array($result) && !empty($result) ? current($result[0]) : NULL;
     }
 
     //查找最小的值
     public function min($data)
     {
-        return $this->statistics(__FUNCTION__, $data);
+        $this->statistics(__FUNCTION__, $data);
+        $result = $this->select("");
+        return is_array($result) && !empty($result) ? current($result[0]) : NULL;
     }
 
     //查找平均值
     public function avg($data)
     {
-        return $this->statistics(__FUNCTION__, $data);
+        $this->statistics(__FUNCTION__, $data);
+        $result = $this->select("");
+        return is_array($result) && !empty($result) ? current($result[0]) : NULL;
     }
 
     //SQL求合SUM计算
     public function sum($data)
     {
-        return $this->statistics(__FUNCTION__, $data);
+        $this->statistics(__FUNCTION__, $data);
+        $result = $this->select("");
+        return is_array($result) && !empty($result) ? current($result[0]) : NULL;
     }
 
 
@@ -469,6 +486,8 @@ abstract class Db implements DbInterface
                         $where .= strtoupper($v) . " ";
                     } else if (is_string($k) && !empty($v)) {
                         $where .= (is_numeric($v) ? " $k=$v " : " $k='$v' ") . " AND ";
+                    } else if (is_numeric($k) && is_string($v)) {
+                        $where .= $v . " AND ";
                     } else if (!empty($v) || $v === 0) {
                         $where .= "'" . $v . "' AND ";
                     }
