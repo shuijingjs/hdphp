@@ -44,7 +44,6 @@ HDPHP遵循Apache2开源协议发布。Apache Licence是著名的非盈利开源
 1. 修复盾友“笑风痴”提出的购物车类问题
 2. DEBUG调式，增加session与cookie监控
 3. 增加Cookie处理函数
-
 ```
 
 ###以往更新
