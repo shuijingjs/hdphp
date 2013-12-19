@@ -96,19 +96,6 @@ class ViewTag
         return $str;
     }
 
-    //设置js常量
-    public function _jsconst($attr, $content)
-    {
-        $const = get_defined_constants(true);
-        $arr = preg_grep("/http/", $const['user']);
-        $str = "<script type='text/javascript'>\n";
-        foreach ($arr as $k => $v) {
-            $str .= "\t\t" . str_replace("_", '', $k) . " = '" . $v . "';\n";
-        }
-        $str .= "</script>";
-        return $str;
-    }
-
     //图片放大镜
     public function _zoom($attr, $content)
     {
@@ -665,25 +652,36 @@ class ViewTag
         return $str;
     }
 
+    //设置js常量
+    public function _jsconst($attr, $content)
+    {
+        $const = get_defined_constants(true);
+        $arr = preg_grep("/http/", $const['user']);
+        $str = "<script type='text/javascript'>\n";
+        foreach ($arr as $k => $v) {
+            $str .= "\t\t" . str_replace("_", '', $k) . " = '" . $v . "';\n";
+        }
+        $str .= "</script>";
+        return $str;
+    }
+
     //HdUi
     public function _hdui()
     {
         $str = '';
-        $str .= "<script type='text/javascript' src='__HDPHP_EXTEND__/Org/Jquery/jquery-1.8.2.min.js'></script>";
-        $str .= '<script src="__HDPHP_EXTEND__/Org/hdui/js/lhgcalendar.min.js"></script>';
-        $str .= '<link href="__HDPHP_EXTEND__/Org/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">';
-        $str .= '<script src="__HDPHP_EXTEND__/Org/bootstrap/js/bootstrap.min.js"></script>';
-        $str .= '
-  <!--[if lte IE 6]>
+        $str .= "<script type='text/javascript' src='__HDPHP_EXTEND__/Org/Jquery/jquery-1.8.2.min.js'></script>\n";
+        $str .= '<script src="__HDPHP_EXTEND__/Org/hdui/js/lhgcalendar.min.js"></script>'."\n";
+        $str .= '<link href="__HDPHP_EXTEND__/Org/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">'."\n";
+        $str .= '<script src="__HDPHP_EXTEND__/Org/bootstrap/js/bootstrap.min.js"></script>'."\n";
+        $str .= '<!--[if lte IE 6]>
   <link rel="stylesheet" type="text/css" href="__HDPHP_EXTEND__/Org/bootstrap/ie6/css/bootstrap-ie6.css">
   <![endif]-->
   <!--[if lte IE 7]>
   <link rel="stylesheet" type="text/css" href="__HDPHP_EXTEND__/Org/bootstrap/ie6/css/ie.css">
   <![endif]-->';
-        $str .= '<link href="__HDPHP_EXTEND__/Org/hdui/css/hdui.css" rel="stylesheet" media="screen">';
-        $str .= '<script src="__HDPHP_EXTEND__/Org/hdui/js/hdui.js"></script>';
-//        $str .= '<link href="__HDPHP_EXTEND__/Org/imageCrop/crop.css" rel="stylesheet" media="screen">';
-//        $str .= '<script src="__HDPHP_EXTEND__/Org/imageCrop/crop.js"></script>';
+        $str .= "<link href='__HDPHP_EXTEND__/Org/hdui/css/hdui.css' rel='stylesheet' media='screen'>\n";
+        $str .= "<script src='__HDPHP_EXTEND__/Org/hdui/js/hdui.js'></script>\n";
+        $str .= $this->_jsconst(null, null);
         return $str;
     }
 }

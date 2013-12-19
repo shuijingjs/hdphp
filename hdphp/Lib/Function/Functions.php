@@ -518,6 +518,7 @@ function Q($var, $default = null, $filter = null)
         return $value;
         //不存在值时返回第2个参数，例：$this->_get("page")当$_GET['page']不存在page时执行
     } else {
+        $data[$var[1]] = $default;
         return $default;
     }
 }

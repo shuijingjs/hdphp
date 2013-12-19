@@ -457,6 +457,9 @@ table.table2 tbody th, table.table2 tbody td {
 .w600 {
     width: 600px;
 }
+.w700 {
+    width: 700px;
+}
 
 .h60 {
     height: 60px;
@@ -630,9 +633,11 @@ select {
 /* ====================================================================================*/
 .label, .message {
     font-size: 12px;
-    /*color: #999999;*/
     display: inline-block;
     margin-left: 15px;
+}
+.message {
+    color:red;
 }
 
 .validation {

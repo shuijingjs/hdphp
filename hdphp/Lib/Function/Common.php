@@ -650,23 +650,21 @@ function extension_exists($ext)
 
 /**
  * 调用标签函数
- * 第1个参数为 标签方法名，第2个参数为标签参数
+ * @param $tag 标签名
+ * @param $attr 属性
+ * @param $content 内容
+ * @return bool
  */
-function tag()
+function tag($tag, $attr = array(), $content = "")
 {
-    $param = func_get_args();
-    //标签方法
-    $_func = "_" . array_shift($param);
-    //参数
-    $_attr = array_shift($param);
-    unset($param);
+    $tag = "_" . $tag;
     $tagClass = array(); //标签库类
     $tags = C('TPL_TAGS'); //加载扩展标签库
     if (!empty($tags) && is_array($tags)) { //如果配置文件中存在标签定义
         foreach ($tags as $k) { //加载其他模块或应用中的标签库
             $arr = explode('.', $k); //如果拆分后大于1的为其他模块或应用的标签定义
-            if (!import($k)) {
-                $tagClass[] = array_pop($arr) . "Tag"; //压入标签库类
+            if (import($k)) {
+                $tagClass[] = array_pop($arr); //压入标签库类
             }
         }
     }
@@ -674,8 +672,8 @@ function tag()
     $tagClass[] = 'ViewTag';
     foreach ($tagClass as $_class) {
         $obj = new $_class;
-        if (method_exists($obj, $_func)) {
-            return $obj->$_func($_attr, "", "");
+        if (method_exists($obj, $tag)) {
+            return $obj->$tag($attr, $content);
         }
     }
     return false;
