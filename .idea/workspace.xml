@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98133d90-3416-464a-af79-8760fd9ad0e3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hdphp/Data/Image/debug.png" afterPath="$PROJECT_DIR$/hdphp/Data/Image/debug.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup/session/hdsess_anmn29l8mckn08rdcmbisha086" afterPath="$PROJECT_DIR$/setup/session/hdsess_anmn29l8mckn08rdcmbisha086" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup/session/hdsess_se9pc89s0t68i4chg6acs8let1" afterPath="$PROJECT_DIR$/setup/session/hdsess_se9pc89s0t68i4chg6acs8let1" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hdphp/Extend/Org/icheck" afterPath="$PROJECT_DIR$/hdphp/Extend/Org/icheck" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup/Temp/Boot.php" afterPath="$PROJECT_DIR$/setup/Temp/Boot.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hdphp/Lib/Function/Common.php" afterPath="$PROJECT_DIR$/hdphp/Lib/Function/Common.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hdphp/Lib/Function/Functions.php" afterPath="$PROJECT_DIR$/hdphp/Lib/Function/Functions.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hdphp/Lib/Driver/View/ViewTag.class.php" afterPath="$PROJECT_DIR$/hdphp/Lib/Driver/View/ViewTag.class.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hdphp/Extend/Org/hdui/css/hdui.css" afterPath="$PROJECT_DIR$/hdphp/Extend/Org/hdui/css/hdui.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="hdphp.iws" />
     <ignored path=".idea/workspace.xml" />
